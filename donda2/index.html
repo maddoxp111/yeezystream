@@ -18,6 +18,14 @@
       margin: 0;
       padding: 40px;
     }
+    #back {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+      text-decoration: none;
+      color: black;
+    }
     #playlist {
       display: flex;
       flex-direction: column;
@@ -42,6 +50,9 @@
       cursor: pointer;
       user-select: none;
     }
+    .material-icons {
+      vertical-align: middle;
+    }
     input[type="range"] {
       accent-color: #000;
       cursor: pointer;
@@ -58,6 +69,7 @@
   </style>
 </head>
 <body>
+  <a id="back" href="/">&#x3C;</a>
   <img src="https://upload.wikimedia.org/wikipedia/en/a/a6/Donda_2_streaming_album_cover.jpg" alt="Donda 2" style="width:300px;height:auto;margin-bottom:20px;" />
   <h1>DONDA 2</h1>
   <div class="producer">EXECUTIVE PRODUCED BY DIGITAL NAS</div>
