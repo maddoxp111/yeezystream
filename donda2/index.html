@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>DONDA 2</title>
   <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/7/70/Solid_white.svg">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap');
     body {
@@ -96,9 +97,9 @@
       title.className = 'track-title';
       title.textContent = track.title;
 
-      const button = document.createElement('div');
-      button.className = 'play-pause';
-      button.textContent = '⏵';
+      const button = document.createElement('i');
+      button.className = 'material-icons play-pause';
+      button.textContent = 'play_arrow';
 
       const audio = new Audio(track.file);
       audioElements.push(audio);
@@ -129,12 +130,12 @@
 
       audio.addEventListener('ended', () => {
         audio.currentTime = 0;
-        button.textContent = '⏵';
+        button.textContent = 'play_arrow';
         const next = audioElements[index + 1];
         const nextBtn = playlist.querySelectorAll('.play-pause')[index + 1];
         if (next && nextBtn) {
           next.play();
-          nextBtn.textContent = '⏸';
+          nextBtn.textContent = 'pause';
         }
       });
 
@@ -143,16 +144,16 @@
           if (a !== audio) {
             a.pause();
             a.currentTime = 0;
-            playlist.querySelectorAll('.play-pause')[i].textContent = '⏵';
+            playlist.querySelectorAll('.play-pause')[i].textContent = 'play_arrow';
           }
         });
 
         if (audio.paused) {
           audio.play();
-          button.textContent = '⏸';
+          button.textContent = 'pause';
         } else {
           audio.pause();
-          button.textContent = '⏵';
+          button.textContent = 'play_arrow';
         }
       });
 
