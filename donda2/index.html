@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DONDA 2</title>
+  <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/7/70/Solid_white.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap');
+    body {
+      background-color: #fff;
+      color: #000;
+      font-family: 'Sometype Mono', monospace;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 40px;
+    }
+    #playlist {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 40px;
+      transform: translateX(-32px);
+    }
+    .track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      width: 600px;
+    }
+    .track-title {
+      width: 130px;
+      text-align: right;
+    }
+    .play-pause {
+      font-size: 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    input[type="range"] {
+      accent-color: #000;
+      cursor: pointer;
+      width: 200px;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+    .producer {
+      font-size: 10px;
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://upload.wikimedia.org/wikipedia/en/a/a6/Donda_2_streaming_album_cover.jpg" alt="Donda 2" style="width:300px;height:auto;margin-bottom:20px;" />
+  <h1>DONDA 2</h1>
+  <div class="producer">EXECUTIVE PRODUCED BY DIGITAL NAS</div>
+  <div id="playlist"></div>
+  <script>
+    const tracks = [
+      { title: 'TRUE LOVE', file: '01 TRUE LOVE.mp3' },
+      { title: 'BROKEN ROAD', file: '02 BROKEN ROAD.mp3' },
+      { title: 'GET LOST', file: '03 GET LOST.mp3' },
+      { title: 'KEEP THE FLOWERS', file: '04 KEEP THE FLOWERS.mp3' },
+      { title: 'JESSE', file: 'JESSE.mp3' },
+      { title: 'TOO EASY', file: '05 TOO EASY.mp3' },
+      { title: 'PABLO', file: '06 PABLO.mp3' },
+      { title: 'MR MIAGI', file: '07 MR MIAGI.mp3' },
+      { title: 'HAPPY', file: '08 HAPPY.mp3' },
+      { title: 'SECURITY', file: '09 SECURITY.mp3' },
+      { title: 'CITY OF GOD', file: '10 CITY OF GOD.mp3' },
+      { title: '530', file: '11 530.mp3' },
+      { title: 'SCIFI', file: '12 SCIFI.mp3' },
+      { title: 'SUZY', file: 'SUZY.mp3' },
+      { title: 'BURN EVERYTHING', file: '13 BURN EVERYTHING.mp3' },
+      { title: 'LOUIE BAGS', file: '14 LOUIE BAG.mp3' },
+      { title: 'WE DID IT', file: '15 WE DID IT.mp3' },
+      { title: 'MAINTENANCE', file: '16 MAINTENANCE.mp3' },
+      { title: 'LORD LIFT ME UP', file: '17 LORD LIFT.mp3' },
+      { title: 'FIRST TIME IN A LONG TIME', file: '18 FIRST TIME.mp3' }
+    ];
+
+    const playlist = document.getElementById('playlist');
+    const audioElements = [];
+
+    tracks.forEach((track, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'track';
+
+      const title = document.createElement('div');
+      title.className = 'track-title';
+      title.textContent = track.title;
+
+      const button = document.createElement('div');
+      button.className = 'play-pause';
+      button.textContent = '⏵';
+
+      const audio = new Audio(track.file);
+      audioElements.push(audio);
+
+      const progress = document.createElement('input');
+      progress.type = 'range';
+      progress.min = 0;
+      progress.value = 0;
+      progress.step = 1;
+
+      const timeLabel = document.createElement('div');
+      timeLabel.style.minWidth = '75px';
+      timeLabel.textContent = '0:00 / 0:00';
+
+      const formatTime = secs => `${Math.floor(secs / 60)}:${(Math.floor(secs % 60)).toString().padStart(2, '0')}`;
+
+      audio.addEventListener('timeupdate', () => {
+        progress.value = audio.currentTime;
+        timeLabel.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+      });
+
+      audio.addEventListener('loadedmetadata', () => {
+        progress.max = audio.duration;
+        timeLabel.textContent = `0:00 / ${formatTime(audio.duration)}`;
+      });
+
+      progress.addEventListener('input', () => audio.currentTime = progress.value);
+
+      audio.addEventListener('ended', () => {
+        audio.currentTime = 0;
+        button.textContent = '⏵';
+        const next = audioElements[index + 1];
+        const nextBtn = playlist.querySelectorAll('.play-pause')[index + 1];
+        if (next && nextBtn) {
+          next.play();
+          nextBtn.textContent = '⏸';
+        }
+      });
+
+      button.addEventListener('click', () => {
+        audioElements.forEach((a, i) => {
+          if (a !== audio) {
+            a.pause();
+            a.currentTime = 0;
+            playlist.querySelectorAll('.play-pause')[i].textContent = '⏵';
+          }
+        });
+
+        if (audio.paused) {
+          audio.play();
+          button.textContent = '⏸';
+        } else {
+          audio.pause();
+          button.textContent = '⏵';
+        }
+      });
+
+      wrapper.appendChild(title);
+      wrapper.appendChild(button);
+      wrapper.appendChild(progress);
+      wrapper.appendChild(timeLabel);
+      playlist.appendChild(wrapper);
+    });
+  </script>
+</body>
+</html>
